@@ -1,0 +1,31 @@
+{
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/.DS_Store": true,
+    "**/Thumbs.db": true,
+    "**/flutter/ephemeral": true,
+    "**/Flutter/ephemeral": true,
+    "**/.symlinks": true,
+    "**/.plugin_symlinks": true,
+    "[!l]*/**": true,
+    "l[!i]*/**": true,
+    "li[!b]*/**": true
+  },
+  "search.exclude": {
+    "**/build/**": true,
+    "**/.dart_tool/**": true,
+    "**/.git/**": true,
+    "**/.symlinks/**": true,
+    "**/.plugin_symlinks/**": true
+  },
+  "files.watcherExclude": {
+    "**/build/**": true,
+    "**/.dart_tool/**": true,
+    "**/.git/**": true,
+    "**/.symlinks/**": true,
+    "**/.plugin_symlinks/**": true
+  },
+  "dart.flutterSdkPath": ".fvm/versions/3.44.8"
+}

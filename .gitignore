@@ -1,0 +1,68 @@
+# -------------------------------------------------------------------------
+# 🛠️ FVM (Flutter Version Management)
+# -------------------------------------------------------------------------
+
+# -------------------------------------------------------------------------
+# 🎯 Dart & Flutter (Geral)
+# -------------------------------------------------------------------------
+.dart_tool/
+.packages
+.pub-cache/
+.pub/
+build/
+.web/
+
+# -------------------------------------------------------------------------
+# 💻 IDEs (VSCode e Android Studio)
+# -------------------------------------------------------------------------
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# -------------------------------------------------------------------------
+# 🤖 Android Nativo
+# -------------------------------------------------------------------------
+.gradle/
+local.properties
+*.kwj
+*.keystore
+*.jks
+app/signingKey.secret.keys
+/android/key.properties
+
+# -------------------------------------------------------------------------
+# 🍏 iOS / macOS Nativo
+# -------------------------------------------------------------------------
+.storyboard_id_manifest
+.tags
+DerivedData/
+Assets.xcassets/
+Pods/
+CMakeLists.txt
+cmake-build-*/
+.symlinks/
+*.moved-aside
+*.xcuserstate
+*.xcworkspace
+/ios/.generated/
+/ios/Flutter/Ephemeral.xcframework
+/ios/Flutter/Generated.xcconfig
+/ios/Flutter/flutter_export_environment.sh
+
+# -------------------------------------------------------------------------
+# 🛡️ Segurança, Variáveis de Ambiente e Logs
+# -------------------------------------------------------------------------
+.env
+.env.*
+*.log
+doc/api/
+
+# FVM Version Cache
+.fvm/
