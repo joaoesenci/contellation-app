@@ -1,4 +1,5 @@
 import 'package:constellation_app/app/app_routes.dart';
+import 'package:constellation_app/core/domain/entities/note_entity.dart';
 import 'package:constellation_app/features/home/home_routes.dart';
 import 'package:constellation_app/features/home/presentation/components/sections/home_sections/home_initial_section.dart';
 import 'package:constellation_app/features/home/presentation/components/sections/home_sections/home_loading_section.dart';
@@ -48,9 +49,16 @@ class _HomePageState extends State<HomePage> {
     super.dispose();
   }
 
-  void _onTapFloatingActionButton() async {
+  void _onTapFloatingActionButton(List<NoteEntity> allNotes) async {
     await HapticFeedback.lightImpact();
-    Modular.to.pushNamed('${AppRoutes.home}${HomeRoutes.editNote}');
+
+    final isNoteSaved = await Modular.to.pushNamed<bool>(
+      '${AppRoutes.home}${HomeRoutes.editNote}',
+      arguments: {'allNotes': allNotes},
+    );
+    if (isNoteSaved == true && mounted) {
+      _cubit.onRefreshNotes();
+    }
   }
 
   @override
@@ -96,7 +104,9 @@ class _HomePageState extends State<HomePage> {
             backgroundColor: context.colors.primary,
             floatingActionButton:
                 state.status == HomeStatus.initial && !state.isDeleting
-                ? AddNoteFloatingButton(onTap: _onTapFloatingActionButton)
+                ? AddNoteFloatingButton(
+                    onTap: () => _onTapFloatingActionButton(state.allNotes),
+                  )
                 : null,
             body: switch (state.status) {
               HomeStatus.initial => HomeInitialSection(

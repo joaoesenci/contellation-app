@@ -60,6 +60,7 @@ class NotesMenuListviewItem extends StatelessWidget {
     final outlineColor = context.colors.outline;
     final tagIcon = _setTagIcon(note.constellationId);
     final tagText = _setTagString(note.constellationId);
+    final noteText = note.text.isEmpty ? AppStrings.withoutBodyNote : note.text;
 
     return Material(
       color: isSelected ? secundaryColor.withAlpha(100) : secundaryColor,
@@ -104,7 +105,7 @@ class NotesMenuListviewItem extends StatelessWidget {
                     ),
                     AppSpacing.vExtraSmall,
                     AppEllipsisText(
-                      text: note.text,
+                      text: noteText,
                       boxWidth: isSelected ? 205 : 250,
                       style: context.texts.bodySmall!.copyWith(
                         color: onSecundaryColor,

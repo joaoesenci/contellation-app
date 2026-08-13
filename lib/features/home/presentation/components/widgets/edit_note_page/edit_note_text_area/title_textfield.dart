@@ -17,7 +17,6 @@ class TitleTextfield extends StatelessWidget {
 
     return TextField(
       controller: controller,
-      autofocus: controller.text.isEmpty,
       maxLines: null,
       maxLength: 100,
       keyboardType: TextInputType.text,

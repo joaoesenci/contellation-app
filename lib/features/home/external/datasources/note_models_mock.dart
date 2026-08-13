@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:constellation_app/core/infra/models/note_model.dart';
-import 'package:constellation_app/shared/constants/app_images.dart';
 import 'package:constellation_app/shared/constants/app_strings.dart';
 
 final class NoteModelsMock {
@@ -68,17 +67,17 @@ final class NoteModelsMock {
       'Reunir a equipe para discutir a Sprint.',
     ];
 
-    const stars = AppImages.starsList;
-
     final String? constellationId = index < 3 ? null : ids[index % ids.length];
 
+    final int starVariant = index < 3 ? 5 : Random().nextInt(4) + 1;
+
     return NoteModel(
-      id: index + 1,
+      id: (index + 1).toString(),
       constellationId: constellationId,
       title: titles[index],
       text: texts[index],
       date: DateTime.now().subtract(Duration(days: index)),
-      starIconPath: stars[Random().nextInt(stars.length)],
+      starVariant: starVariant,
       positionX: index.toDouble(),
       positionY: index.toDouble(),
     );

@@ -5,15 +5,20 @@ import 'package:flutter/material.dart';
 
 class SaveNoteTextButton extends StatelessWidget {
   final VoidCallback onTap;
+  final bool isActive;
 
-  const SaveNoteTextButton({super.key, required this.onTap});
+  const SaveNoteTextButton({
+    super.key,
+    required this.onTap,
+    required this.isActive,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Material(
       color: Colors.transparent,
       child: InkWell(
-        onTap: onTap,
+        onTap: isActive ? onTap : null,
         borderRadius: AppBorderRadius.allCircular,
         child: Padding(
           padding: const EdgeInsets.symmetric(
@@ -23,7 +28,9 @@ class SaveNoteTextButton extends StatelessWidget {
           child: Text(
             AppStrings.saveNote,
             style: context.texts.bodyMedium!.copyWith(
-              color: context.colors.tertiary,
+              color: isActive
+                  ? context.colors.tertiary
+                  : context.colors.onSecondary,
               fontWeight: FontWeight.bold,
             ),
           ),

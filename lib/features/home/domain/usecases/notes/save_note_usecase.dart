@@ -7,16 +7,20 @@ import 'package:fpdart/fpdart.dart';
 final class SaveNoteParams {
   final String title;
   final String text;
-  final String starIconPath;
-  final int? id;
+  final int starVariant;
+  final String? id;
   final String? constellationId;
+  final double positionX;
+  final double positionY;
 
   const SaveNoteParams({
     required this.title,
     required this.text,
-    required this.starIconPath,
+    required this.starVariant,
     required this.id,
     required this.constellationId,
+    required this.positionX,
+    required this.positionY,
   });
 }
 
@@ -28,14 +32,14 @@ final class SaveNoteUsecase implements Usecase<Unit, SaveNoteParams> {
   @override
   Future<Either<Failure, Unit>> call(SaveNoteParams params) {
     final note = NoteEntity(
-      id: params.id,
-      constellationId: params.constellationId ?? '',
+      id: params.id ?? DateTime.now().millisecondsSinceEpoch.toString(),
+      constellationId: params.constellationId,
       title: params.title,
       text: params.text,
       date: DateTime.now(),
-      starIconPath: params.starIconPath,
-      positionX: 0,
-      positionY: 0,
+      starVariant: params.starVariant,
+      positionX: params.positionX,
+      positionY: params.positionY,
     );
 
     return _repository.saveNote(note);

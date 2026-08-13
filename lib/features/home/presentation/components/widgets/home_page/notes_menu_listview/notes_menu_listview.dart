@@ -7,11 +7,11 @@ import 'package:flutter/material.dart';
 
 class NotesMenuListview extends StatelessWidget {
   final List<NoteEntity> notes;
-  final List<int> selectedNotes;
+  final List<String> selectedNotes;
   final ScrollController scrollController;
   final bool isListMode;
-  final ValueChanged<int> onTapNote;
-  final ValueChanged<int> onLongPressNote;
+  final ValueChanged<String> onTapNote;
+  final ValueChanged<String> onLongPressNote;
 
   const NotesMenuListview({
     super.key,
@@ -56,8 +56,8 @@ class NotesMenuListview extends StatelessWidget {
                     return NotesMenuListviewItem(
                       note: note,
                       isSelected: selectedNotes.contains(note.id),
-                      onTap: () => onTapNote(note.id!),
-                      onLongPress: () => onLongPressNote(note.id!),
+                      onTap: () => onTapNote(note.id),
+                      onLongPress: () => onLongPressNote(note.id),
                     );
                   },
                 ),

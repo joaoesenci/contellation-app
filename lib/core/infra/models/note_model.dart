@@ -7,19 +7,19 @@ final class NoteModel extends NoteEntity {
     required super.title,
     required super.text,
     required super.date,
-    required super.starIconPath,
+    required super.starVariant,
     required super.positionX,
     required super.positionY,
   });
 
   factory NoteModel.fromMap(Map<String, dynamic> map) {
     return NoteModel(
-      id: map['id'] as int,
-      constellationId: map['constellationId'] as String,
+      id: map['id'] as String,
+      constellationId: map['constellationId'] as String?,
       title: map['title'] as String,
       text: map['text'] as String,
       date: DateTime.parse(map['date'] as String),
-      starIconPath: map['starIconPath'],
+      starVariant: map['starVariant'],
       positionX: map['positionX'] as double,
       positionY: map['positionY'] as double,
     );
@@ -27,12 +27,12 @@ final class NoteModel extends NoteEntity {
 
   factory NoteModel.fromEntity(NoteEntity entity) {
     return NoteModel(
-      id: entity.id ?? DateTime.now().millisecondsSinceEpoch,
+      id: entity.id,
       constellationId: entity.constellationId,
       title: entity.title,
       text: entity.text,
       date: entity.date,
-      starIconPath: entity.starIconPath,
+      starVariant: entity.starVariant,
       positionX: entity.positionX,
       positionY: entity.positionY,
     );
@@ -45,7 +45,7 @@ final class NoteModel extends NoteEntity {
       'title': title,
       'text': text,
       'date': date.toIso8601String(),
-      'starIconPath': starIconPath,
+      'starVariant': starVariant,
       'positionX': positionX,
       'positionY': positionY,
     };

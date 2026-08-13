@@ -4,7 +4,7 @@ import 'package:constellation_app/features/home/domain/repositories/home_reposit
 import 'package:fpdart/fpdart.dart';
 
 final class DeleteNoteParams {
-  final List<int> notesId;
+  final List<String> notesId;
 
   const DeleteNoteParams({required this.notesId});
 }

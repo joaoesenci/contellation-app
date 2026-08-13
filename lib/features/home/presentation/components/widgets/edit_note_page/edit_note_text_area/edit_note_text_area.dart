@@ -32,6 +32,10 @@ class EditNoteTextArea extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final saveButtonIsActive =
+        titleTextController.text.isNotEmpty ||
+        bodyTextController.text.isNotEmpty;
+
     return Expanded(
       child: GestureDetector(
         onTap: context.unFocus,
@@ -84,7 +88,10 @@ class EditNoteTextArea extends StatelessWidget {
                       ),
                     ),
                     AppSpacing.hMedium,
-                    SaveNoteTextButton(onTap: onTapSaveButton),
+                    SaveNoteTextButton(
+                      onTap: onTapSaveButton,
+                      isActive: saveButtonIsActive,
+                    ),
                   ],
                 ),
               ],

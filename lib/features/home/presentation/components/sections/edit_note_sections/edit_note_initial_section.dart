@@ -24,34 +24,28 @@ class EditNoteInitialSection extends StatelessWidget {
     required this.hintTextPrompt,
   });
 
-  void _onSaveNote() {
+  void _onSaveNote() async {
     if (titleTextController.text.isEmpty && bodyTextController.text.isEmpty) {
       return;
     }
 
-    final title = titleTextController.text.isEmpty
-        ? 'Title'
-        : titleTextController.text;
-
-    final body = bodyTextController.text.isEmpty
-        ? ''
-        : titleTextController.text;
-
-    cubit.onSaveNote(
-      title: title,
-      text: body,
+    await cubit.onSaveNote(
+      title: titleTextController.text.isEmpty
+          ? 'Title'
+          : titleTextController.text,
+      text: bodyTextController.text.isEmpty ? '' : bodyTextController.text,
       id: state.existingNote?.id,
       constellationId: state.selectedConstellationId,
     );
 
-    Modular.to.pop();
     cubit.clearSelectedConstellation();
+    Modular.to.pop(true);
   }
 
   void _onTapReturnButton() {
     if (titleTextController.text.isEmpty && bodyTextController.text.isEmpty) {
-      Modular.to.pop();
       cubit.clearSelectedConstellation();
+      Modular.to.pop(false);
       return;
     }
 

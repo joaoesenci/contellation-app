@@ -1,5 +1,6 @@
 import 'package:constellation_app/app/app_module.dart';
 import 'package:constellation_app/app/app_widget.dart';
+import 'package:constellation_app/shared/constants/app_keys.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -13,12 +14,24 @@ void main() async {
 
   Hive.init(dir.path);
 
-  final Box<Map> notesBox = await Hive.openBox('notes_box');
+  final Box<Map> notesBox = await Hive.openBox<Map>(AppKeys.notesBox);
 
-  SystemChrome.setPreferredOrientations([
+  final Box<Map> constellationLinesBox = await Hive.openBox<Map>(
+    AppKeys.constellationLinesBox,
+  );
+
+  await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
-  ]).then((_) {
-    runApp(ModularApp(module: AppModule(notesBox), child: const AppWidget()));
-  });
+  ]);
+
+  runApp(
+    ModularApp(
+      module: AppModule(
+        notesBox: notesBox,
+        constellationLinesBox: constellationLinesBox,
+      ),
+      child: const AppWidget(),
+    ),
+  );
 }

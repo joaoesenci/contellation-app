@@ -15,8 +15,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class EditNotePage extends StatefulWidget {
   final EditNoteCubit cubit;
   final NoteEntity? existingNote;
+  final List<NoteEntity> allNotes;
 
-  const EditNotePage({super.key, required this.cubit, this.existingNote});
+  const EditNotePage({
+    super.key,
+    required this.cubit,
+    this.existingNote,
+    required this.allNotes,
+  });
 
   @override
   State<EditNotePage> createState() => _EditNotePageState();
@@ -25,6 +31,7 @@ class EditNotePage extends StatefulWidget {
 class _EditNotePageState extends State<EditNotePage> {
   EditNoteCubit get _cubit => widget.cubit;
   NoteEntity? get _existingNote => widget.existingNote;
+  List<NoteEntity> get _allNotes => widget.allNotes;
 
   late final TextEditingController _titleTextController;
   late final TextEditingController _bodyTextController;
@@ -32,14 +39,18 @@ class _EditNotePageState extends State<EditNotePage> {
 
   static const _hintTextPrompts = AppStrings.editNotePrompts;
 
+  late final String _randomPrompt;
+
   @override
   void initState() {
     super.initState();
+
+    _randomPrompt = _hintTextPrompts[Random().nextInt(_hintTextPrompts.length)];
     _titleTextController = TextEditingController(text: _existingNote?.title);
     _bodyTextController = TextEditingController(text: _existingNote?.text);
     _textScrollController = ScrollController();
 
-    _cubit.loadData(_existingNote);
+    _cubit.loadData(_existingNote, _allNotes);
   }
 
   @override
@@ -52,9 +63,6 @@ class _EditNotePageState extends State<EditNotePage> {
 
   @override
   Widget build(BuildContext context) {
-    final randomPrompt =
-        _hintTextPrompts[Random().nextInt(_hintTextPrompts.length)];
-
     return BlocConsumer<EditNoteCubit, EditNoteState>(
       bloc: _cubit,
 
@@ -77,7 +85,7 @@ class _EditNotePageState extends State<EditNotePage> {
               titleTextController: _titleTextController,
               bodyTextController: _bodyTextController,
               textScrollController: _textScrollController,
-              hintTextPrompt: randomPrompt,
+              hintTextPrompt: _randomPrompt,
             ),
             EditNoteStatus.loading => const EditNoteLoadingSection(),
             EditNoteStatus.problem => const EditNoteProblemSection(),

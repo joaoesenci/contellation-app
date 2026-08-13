@@ -1,4 +1,5 @@
 import 'package:constellation_app/core/domain/entities/constellation_entity.dart';
+import 'package:constellation_app/core/domain/entities/constellation_line_entity.dart';
 import 'package:constellation_app/core/domain/entities/note_entity.dart';
 import 'package:constellation_app/features/home/presentation/cubits/home_cubits/home_enum.dart';
 import 'package:equatable/equatable.dart';
@@ -11,8 +12,8 @@ final class HomeState extends Equatable {
   final List<NoteEntity> allNotes;
   final List<NoteEntity> filteredNotes;
   final List<NoteEntity> foundNotes;
-  final List<int> selectedNotesIds;
   final List<ConstellationEntity> constellations;
+  final List<String> selectedNotesIds;
   final bool isListMode;
   final bool isSearching;
   final bool isRefreshing;
@@ -42,8 +43,9 @@ final class HomeState extends Equatable {
     List<NoteEntity>? allNotes,
     List<NoteEntity>? filteredNotes,
     List<NoteEntity>? foundNotes,
-    List<int>? selectedNotesIds,
     List<ConstellationEntity>? constellations,
+    List<ConstellationLineEntity>? constellationLines,
+    List<String>? selectedNotesIds,
     bool? isListMode,
     bool? isSearching,
     bool? isRefreshing,
@@ -53,13 +55,13 @@ final class HomeState extends Equatable {
       status: status ?? this.status,
       feedbackStatus: feedbackStatus ?? this.feedbackStatus,
       message: message ?? this.message,
+      selectedConstellationId:
+          selectedConstellationId ?? this.selectedConstellationId,
       allNotes: allNotes ?? this.allNotes,
       filteredNotes: filteredNotes ?? this.filteredNotes,
       foundNotes: foundNotes ?? this.foundNotes,
-      selectedNotesIds: selectedNotesIds ?? this.selectedNotesIds,
       constellations: constellations ?? this.constellations,
-      selectedConstellationId:
-          selectedConstellationId ?? this.selectedConstellationId,
+      selectedNotesIds: selectedNotesIds ?? this.selectedNotesIds,
       isListMode: isListMode ?? this.isListMode,
       isSearching: isSearching ?? this.isSearching,
       isRefreshing: isRefreshing ?? this.isRefreshing,
@@ -71,11 +73,12 @@ final class HomeState extends Equatable {
   List<Object?> get props => [
     status,
     feedbackStatus,
+    message,
+    selectedConstellationId,
     allNotes,
     filteredNotes,
     foundNotes,
     selectedNotesIds,
-    selectedConstellationId,
     isListMode,
     isSearching,
     isRefreshing,

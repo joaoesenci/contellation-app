@@ -17,6 +17,7 @@ class HeaderBox extends StatefulWidget {
   final bool isListMode;
   final bool isSearching;
   final bool isDeleting;
+  final bool isEmptyNotes;
   final int selectedNotesLenght;
   final TextEditingController textController;
   final ScrollController scrollController;
@@ -35,6 +36,7 @@ class HeaderBox extends StatefulWidget {
     required this.isListMode,
     required this.isSearching,
     required this.isDeleting,
+    required this.isEmptyNotes,
     required this.selectedNotesLenght,
     required this.textController,
     required this.scrollController,
@@ -115,6 +117,7 @@ class _HeaderBoxState extends State<HeaderBox> {
                     isSearching: widget.isSearching,
                     isListMode: widget.isListMode,
                     isDeleting: widget.isDeleting,
+                    isEmptyNotes: widget.isEmptyNotes,
                     onTapSearchButton: widget.onTapSearchButton,
                     onTapToggleButton: widget.onTapToggleButton,
                     onTapClearButton: widget.onTapClearButton,

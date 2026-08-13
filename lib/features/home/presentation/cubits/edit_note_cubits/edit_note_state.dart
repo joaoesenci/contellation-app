@@ -8,6 +8,7 @@ final class EditNoteState extends Equatable {
   final EditNoteFeedbackStatus feedbackStatus;
   final String? message;
   final NoteEntity? existingNote;
+  final List<NoteEntity> allNotes;
   final List<ConstellationEntity> constellations;
   final String? selectedConstellationId;
   final bool isRefreshing;
@@ -17,6 +18,7 @@ final class EditNoteState extends Equatable {
     this.feedbackStatus = EditNoteFeedbackStatus.none,
     this.message,
     this.existingNote,
+    this.allNotes = const [],
     this.constellations = const [],
     this.selectedConstellationId,
     this.isRefreshing = false,
@@ -27,6 +29,7 @@ final class EditNoteState extends Equatable {
     EditNoteFeedbackStatus? feedbackStatus,
     String? message,
     NoteEntity? existingNote,
+    List<NoteEntity>? allNotes,
     List<ConstellationEntity>? constellations,
     String? selectedConstellationId,
     bool? isRefreshing,
@@ -36,6 +39,7 @@ final class EditNoteState extends Equatable {
       feedbackStatus: feedbackStatus ?? this.feedbackStatus,
       message: message ?? this.message,
       existingNote: existingNote ?? this.existingNote,
+      allNotes: allNotes ?? this.allNotes,
       constellations: constellations ?? this.constellations,
       selectedConstellationId:
           selectedConstellationId ?? this.selectedConstellationId,

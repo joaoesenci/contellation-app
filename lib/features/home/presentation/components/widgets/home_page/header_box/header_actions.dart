@@ -9,6 +9,7 @@ class HeaderActions extends StatelessWidget {
   final bool isListMode;
   final bool isSearching;
   final bool isDeleting;
+  final bool isEmptyNotes;
   final VoidCallback onTapSearchButton;
   final VoidCallback onTapToggleButton;
   final VoidCallback onTapClearButton;
@@ -23,6 +24,7 @@ class HeaderActions extends StatelessWidget {
     required this.isListMode,
     required this.isSearching,
     required this.isDeleting,
+    required this.isEmptyNotes,
   });
 
   void _onTapToggleButton() async {
@@ -45,6 +47,8 @@ class HeaderActions extends StatelessWidget {
                   color: context.colors.error,
                 ),
               )
+            : isEmptyNotes
+            ? const SizedBox.shrink()
             : AppIconButton(
                 onTap: _onTapToggleButton,
                 icon: Icon(

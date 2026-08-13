@@ -29,6 +29,7 @@ final class AppStrings {
   static const String returnText = 'Back to the sky';
   static const String saveNote = 'Save this star';
   static const String setConstellation = 'Guide this star...';
+  static const String withoutBodyNote = 'No details added...';
 
   static const List<String> editNotePrompts = [
     "What thought is orbiting you right now?",

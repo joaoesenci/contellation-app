@@ -36,6 +36,7 @@ class HomeInitialSection extends StatelessWidget {
 
   void _onDeleteNotes() {
     cubit.onDeleteNotes(state.selectedNotesIds);
+    cubit.onClearDeleting();
   }
 
   void _onTapCancelDeleting() async {
@@ -43,9 +44,10 @@ class HomeInitialSection extends StatelessWidget {
     cubit.onClearDeleting();
   }
 
-  void _onTapNote(int id) async {
+  void _onTapNote(BuildContext context, String id) async {
+    await HapticFeedback.selectionClick();
+
     if (state.isDeleting) {
-      await HapticFeedback.selectionClick();
       cubit.onToggleNoteDeleting(id);
       return;
     }
@@ -53,14 +55,17 @@ class HomeInitialSection extends StatelessWidget {
     final note = state.allNotes.firstWhereOrNull((note) => note.id == id);
 
     if (note != null) {
-      Modular.to.pushNamed(
+      final isNoteSaved = await Modular.to.pushNamed<bool>(
         '${AppRoutes.home}${HomeRoutes.editNote}',
-        arguments: note,
+        arguments: {'existingNote': note, 'allNotes': state.allNotes},
       );
+      if (isNoteSaved == true && context.mounted) {
+        cubit.onRefreshNotes();
+      }
     }
   }
 
-  void _onLongPressNote(int id) {
+  void _onLongPressNote(String id) {
     if (state.isDeleting) return;
 
     cubit.onOpenDeleting();
@@ -98,6 +103,7 @@ class HomeInitialSection extends StatelessWidget {
                 isListMode: state.isListMode,
                 isSearching: state.isSearching,
                 isDeleting: state.isDeleting,
+                isEmptyNotes: state.allNotes.isEmpty,
                 selectedNotesLenght: state.selectedNotesIds.length,
                 textController: textController,
                 scrollController: headerScrollController,
@@ -119,7 +125,7 @@ class HomeInitialSection extends StatelessWidget {
                       selectedNotes: state.selectedNotesIds,
                       scrollController: listScrollController,
                       isListMode: state.isListMode,
-                      onTapNote: _onTapNote,
+                      onTapNote: (id) => _onTapNote(context, id),
                       onLongPressNote: _onLongPressNote,
                     ),
             ],

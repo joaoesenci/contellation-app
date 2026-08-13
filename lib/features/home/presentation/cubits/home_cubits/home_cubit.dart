@@ -3,10 +3,10 @@ import 'dart:async';
 import 'package:constellation_app/core/domain/entities/constellation_entity.dart';
 import 'package:constellation_app/core/domain/entities/note_entity.dart';
 import 'package:constellation_app/core/domain/usecases/usecase.dart';
-import 'package:constellation_app/features/home/domain/usecases/delete_note_usecase.dart';
-import 'package:constellation_app/features/home/domain/usecases/get_all_notes_usecase.dart';
+import 'package:constellation_app/features/home/domain/usecases/notes/delete_note_usecase.dart';
+import 'package:constellation_app/features/home/domain/usecases/notes/get_all_notes_usecase.dart';
 import 'package:constellation_app/features/home/domain/usecases/get_fixed_constellations_usecase.dart';
-import 'package:constellation_app/features/home/domain/usecases/save_note_usecase.dart';
+import 'package:constellation_app/features/home/domain/usecases/notes/save_note_usecase.dart';
 import 'package:constellation_app/features/home/presentation/cubits/home_cubits/home_enum.dart';
 import 'package:constellation_app/features/home/presentation/cubits/home_cubits/home_state.dart';
 import 'package:constellation_app/shared/constants/app_durations.dart';
@@ -52,8 +52,9 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   void onSelectConstellation(String constellationId) {
-    final newSelectedId =
-        state.selectedConstellationId == constellationId ? '' : constellationId;
+    final newSelectedId = state.selectedConstellationId == constellationId
+        ? ''
+        : constellationId;
 
     emit(
       state.copyWith(
@@ -69,13 +70,12 @@ class HomeCubit extends Cubit<HomeState> {
     _debounce = Timer(AppDurations.onSearchNotesDebounce, () {
       final lowQuery = query.toLowerCase();
 
-      final foundNotes =
-          state.allNotes.where((note) {
-            final title = note.title.toLowerCase();
-            final text = note.text.toLowerCase();
+      final foundNotes = state.allNotes.where((note) {
+        final title = note.title.toLowerCase();
+        final text = note.text.toLowerCase();
 
-            return title.contains(lowQuery) || text.contains(lowQuery);
-          }).toList();
+        return title.contains(lowQuery) || text.contains(lowQuery);
+      }).toList();
 
       emit(
         state.copyWith(foundNotes: lowQuery.isEmpty ? const [] : foundNotes),
@@ -105,7 +105,7 @@ class HomeCubit extends Cubit<HomeState> {
     emit(state.copyWith(selectedNotesIds: const [], isDeleting: false));
   }
 
-  void onToggleNoteDeleting(int noteId) {
+  void onToggleNoteDeleting(String noteId) {
     final selectedNotes = state.selectedNotesIds;
     final isSelectedNote = selectedNotes.contains(noteId);
 
@@ -115,10 +115,9 @@ class HomeCubit extends Cubit<HomeState> {
 
     emit(
       state.copyWith(
-        selectedNotesIds:
-            isSelectedNote
-                ? (selectedNotes.where((id) => id != noteId).toList())
-                : ([...selectedNotes, noteId]),
+        selectedNotesIds: isSelectedNote
+            ? (selectedNotes.where((id) => id != noteId).toList())
+            : ([...selectedNotes, noteId]),
       ),
     );
   }
@@ -126,25 +125,28 @@ class HomeCubit extends Cubit<HomeState> {
   //----------------------------------------------------------------------
   // 💡 BUSINESS LOGIC FUNCTIONS
   //----------------------------------------------------------------------
-  Future<void> onDeleteNotes(List<int> notesId) async {
+  Future<void> onDeleteNotes(List<String> notesId) async {
     emit(state.copyWith(isRefreshing: true));
 
     final result = await _deleteNoteUsecase(DeleteNoteParams(notesId: notesId));
 
     result.fold(
       (failure) => emit(
-        state.copyWith(feedbackStatus: errorFeedback, message: failure.message),
+        state.copyWith(
+          feedbackStatus: errorFeedback,
+          message: failure.message,
+          isRefreshing: false,
+        ),
       ),
       (_) => _refreshAllNotes(),
     );
   }
 
   Future<void> loadData() async {
-    final (constellationsResult, allNotesResult) =
-        await (
-          _getFixedConstellationsUsecase(noParams),
-          _getAllNotesUsecase(noParams),
-        ).wait;
+    final (constellationsResult, allNotesResult) = await (
+      _getFixedConstellationsUsecase(noParams),
+      _getAllNotesUsecase(noParams),
+    ).wait;
 
     String? errorMessage;
     List<ConstellationEntity>? allConstellations;
@@ -179,6 +181,17 @@ class HomeCubit extends Cubit<HomeState> {
     }
   }
 
+  void onRefreshNotes() {
+    emit(
+      state.copyWith(
+        allNotes: const [],
+        status: loadingStatus,
+        isRefreshing: true,
+      ),
+    );
+    _refreshAllNotes();
+  }
+
   //----------------------------------------------------------------------
   // 🔒 PRIVATE FUNCTIONS
   //----------------------------------------------------------------------
@@ -187,10 +200,35 @@ class HomeCubit extends Cubit<HomeState> {
 
     result.fold(
       (failure) => emit(
-        state.copyWith(feedbackStatus: errorFeedback, message: failure.message),
+        state.copyWith(
+          status: problemStatus,
+          feedbackStatus: errorFeedback,
+          message: failure.message,
+          isRefreshing: false,
+        ),
       ),
-      (allNotes) =>
-          emit(state.copyWith(allNotes: allNotes, isRefreshing: false)),
+      (allNotes) {
+        final newList = List<NoteEntity>.from(allNotes);
+
+        emit(
+          state.copyWith(
+            status: initialStatus,
+            allNotes: newList,
+            isRefreshing: false,
+            filteredNotes: state.selectedConstellationId.isEmpty
+                ? const []
+                : newList
+                      .where(
+                        (note) =>
+                            note.constellationId ==
+                            state.selectedConstellationId,
+                      )
+                      .toList(),
+            foundNotes: const [],
+            isSearching: false,
+          ),
+        );
+      },
     );
   }
 
@@ -199,10 +237,9 @@ class HomeCubit extends Cubit<HomeState> {
       return [];
     }
 
-    final List<NoteEntity> filteredNotes =
-        state.allNotes
-            .where((note) => note.constellationId == constellationId)
-            .toList();
+    final List<NoteEntity> filteredNotes = state.allNotes
+        .where((note) => note.constellationId == constellationId)
+        .toList();
 
     return filteredNotes;
   }
