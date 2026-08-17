@@ -1,5 +1,4 @@
 import 'package:constellation_app/core/domain/entities/constellation_entity.dart';
-import 'package:constellation_app/core/domain/entities/constellation_line_entity.dart';
 import 'package:constellation_app/core/domain/entities/note_entity.dart';
 import 'package:constellation_app/features/home/presentation/cubits/home_cubits/home_enum.dart';
 import 'package:equatable/equatable.dart';
@@ -44,7 +43,6 @@ final class HomeState extends Equatable {
     List<NoteEntity>? filteredNotes,
     List<NoteEntity>? foundNotes,
     List<ConstellationEntity>? constellations,
-    List<ConstellationLineEntity>? constellationLines,
     List<String>? selectedNotesIds,
     bool? isListMode,
     bool? isSearching,
@@ -73,7 +71,6 @@ final class HomeState extends Equatable {
   List<Object?> get props => [
     status,
     feedbackStatus,
-    message,
     selectedConstellationId,
     allNotes,
     filteredNotes,

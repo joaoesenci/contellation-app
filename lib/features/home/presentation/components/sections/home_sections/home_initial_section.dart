@@ -57,7 +57,7 @@ class HomeInitialSection extends StatelessWidget {
     if (note != null) {
       final isNoteSaved = await Modular.to.pushNamed<bool>(
         '${AppRoutes.home}${HomeRoutes.editNote}',
-        arguments: {'existingNote': note, 'allNotes': state.allNotes},
+        arguments: note,
       );
       if (isNoteSaved == true && context.mounted) {
         cubit.onRefreshNotes();

@@ -15,14 +15,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class EditNotePage extends StatefulWidget {
   final EditNoteCubit cubit;
   final NoteEntity? existingNote;
-  final List<NoteEntity> allNotes;
 
-  const EditNotePage({
-    super.key,
-    required this.cubit,
-    this.existingNote,
-    required this.allNotes,
-  });
+  const EditNotePage({super.key, required this.cubit, this.existingNote});
 
   @override
   State<EditNotePage> createState() => _EditNotePageState();
@@ -31,7 +25,6 @@ class EditNotePage extends StatefulWidget {
 class _EditNotePageState extends State<EditNotePage> {
   EditNoteCubit get _cubit => widget.cubit;
   NoteEntity? get _existingNote => widget.existingNote;
-  List<NoteEntity> get _allNotes => widget.allNotes;
 
   late final TextEditingController _titleTextController;
   late final TextEditingController _bodyTextController;
@@ -50,7 +43,7 @@ class _EditNotePageState extends State<EditNotePage> {
     _bodyTextController = TextEditingController(text: _existingNote?.text);
     _textScrollController = ScrollController();
 
-    _cubit.loadData(_existingNote, _allNotes);
+    _cubit.loadData(_existingNote);
   }
 
   @override

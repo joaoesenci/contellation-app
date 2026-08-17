@@ -16,10 +16,6 @@ void main() async {
 
   final Box<Map> notesBox = await Hive.openBox<Map>(AppKeys.notesBox);
 
-  final Box<Map> constellationLinesBox = await Hive.openBox<Map>(
-    AppKeys.constellationLinesBox,
-  );
-
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
@@ -27,10 +23,7 @@ void main() async {
 
   runApp(
     ModularApp(
-      module: AppModule(
-        notesBox: notesBox,
-        constellationLinesBox: constellationLinesBox,
-      ),
+      module: AppModule(notesBox: notesBox),
       child: const AppWidget(),
     ),
   );

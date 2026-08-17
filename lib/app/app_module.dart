@@ -7,18 +7,11 @@ import 'package:hive_ce/hive.dart';
 
 class AppModule extends Module {
   final Box<Map> _notesBox;
-  final Box<Map> _constellationLinesBox;
 
-  AppModule({
-    required Box<Map> notesBox,
-    required Box<Map> constellationLinesBox,
-  }) : _notesBox = notesBox,
-       _constellationLinesBox = constellationLinesBox;
+  AppModule({required Box<Map> notesBox}) : _notesBox = notesBox;
 
   @override
-  List<Module> get imports => [
-    CoreModule(notesBox: _notesBox, linesBox: _constellationLinesBox),
-  ];
+  List<Module> get imports => [CoreModule(notesBox: _notesBox)];
 
   @override
   void routes(RouteManager r) {

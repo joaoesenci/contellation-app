@@ -10,8 +10,6 @@ final class SaveNoteParams {
   final int starVariant;
   final String? id;
   final String? constellationId;
-  final double positionX;
-  final double positionY;
 
   const SaveNoteParams({
     required this.title,
@@ -19,8 +17,6 @@ final class SaveNoteParams {
     required this.starVariant,
     required this.id,
     required this.constellationId,
-    required this.positionX,
-    required this.positionY,
   });
 }
 
@@ -38,8 +34,8 @@ final class SaveNoteUsecase implements Usecase<Unit, SaveNoteParams> {
       text: params.text,
       date: DateTime.now(),
       starVariant: params.starVariant,
-      positionX: params.positionX,
-      positionY: params.positionY,
+      positionX: 0,
+      positionY: 0,
     );
 
     return _repository.saveNote(note);

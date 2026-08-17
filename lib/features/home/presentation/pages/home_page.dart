@@ -54,7 +54,6 @@ class _HomePageState extends State<HomePage> {
 
     final isNoteSaved = await Modular.to.pushNamed<bool>(
       '${AppRoutes.home}${HomeRoutes.editNote}',
-      arguments: {'allNotes': allNotes},
     );
     if (isNoteSaved == true && mounted) {
       _cubit.onRefreshNotes();

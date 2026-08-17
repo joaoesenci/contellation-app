@@ -1,9 +1,7 @@
 import 'package:constellation_app/core/domain/entities/constellation_entity.dart';
-import 'package:constellation_app/core/domain/entities/constellation_line_entity.dart';
 import 'package:constellation_app/core/domain/entities/note_entity.dart';
 import 'package:constellation_app/core/domain/failures/failure_mapper.dart';
 import 'package:constellation_app/core/domain/failures/failures.dart';
-import 'package:constellation_app/core/infra/models/constellation_line_model.dart';
 import 'package:constellation_app/core/infra/models/note_model.dart';
 import 'package:constellation_app/features/home/domain/repositories/home_repository.dart';
 import 'package:constellation_app/features/home/infra/datasources/home_datasource.dart';
@@ -14,9 +12,6 @@ final class HomeRepositoryImpl implements IHomeRepository {
 
   HomeRepositoryImpl(this._datasource);
 
-  // ------------------------------------------------------------
-  // ⭐ CONSTELLATIONS
-  // ------------------------------------------------------------
   @override
   Future<Either<Failure, List<ConstellationEntity>>>
   getFixedConstellations() async {
@@ -30,9 +25,6 @@ final class HomeRepositoryImpl implements IHomeRepository {
     }
   }
 
-  // ------------------------------------------------------------
-  // 📝 NOTES
-  // ------------------------------------------------------------
   @override
   Future<Either<Failure, Unit>> saveNote(NoteEntity note) async {
     try {
@@ -59,50 +51,6 @@ final class HomeRepositoryImpl implements IHomeRepository {
   Future<Either<Failure, Unit>> deleteNote(List<String> notesId) async {
     try {
       await _datasource.deleteNote(notesId);
-
-      return right(unit);
-    } catch (e) {
-      return left(mapExceptionFailure(e));
-    }
-  }
-
-  // ------------------------------------------------------------
-  // 🧵 CONSTELLATION LINES
-  // ------------------------------------------------------------
-  @override
-  Future<Either<Failure, Unit>> saveConstellationLines(
-    List<ConstellationLineEntity> lines,
-  ) async {
-    try {
-      final models = lines.map(ConstellationLineModel.fromEntity).toList();
-
-      await _datasource.saveConstellationLines(models);
-
-      return right(unit);
-    } catch (e) {
-      return left(mapExceptionFailure(e));
-    }
-  }
-
-  @override
-  Future<Either<Failure, List<ConstellationLineEntity>>>
-  getAllConstellationLines() async {
-    try {
-      final List<ConstellationLineEntity> lines = await _datasource
-          .getAllConstellationLines();
-
-      return right(lines);
-    } catch (e) {
-      return left(mapExceptionFailure(e));
-    }
-  }
-
-  @override
-  Future<Either<Failure, Unit>> deleteConstellationLines(
-    List<String> linesId,
-  ) async {
-    try {
-      await _datasource.deleteConstellationLines(linesId);
 
       return right(unit);
     } catch (e) {

@@ -6,4 +6,6 @@ final class AppImages {
   static const String star3 = 'assets/images/star_3.svg';
   static const String star4 = 'assets/images/star_4.svg';
   static const String loneStar = 'assets/images/lone_star.svg';
+
+  static Object? get starsList => null;
 }
