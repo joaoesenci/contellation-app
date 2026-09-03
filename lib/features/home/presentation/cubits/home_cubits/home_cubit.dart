@@ -1,8 +1,10 @@
 import 'dart:async';
 
 import 'package:constellation_app/core/domain/entities/constellation_entity.dart';
+import 'package:constellation_app/core/domain/entities/constellation_region_entity.dart';
 import 'package:constellation_app/core/domain/entities/note_entity.dart';
 import 'package:constellation_app/core/domain/usecases/usecase.dart';
+import 'package:constellation_app/core/services/constellation_layout/constellation_layout_service.dart';
 import 'package:constellation_app/features/home/domain/usecases/delete_note_usecase.dart';
 import 'package:constellation_app/features/home/domain/usecases/get_all_notes_usecase.dart';
 import 'package:constellation_app/features/home/domain/usecases/get_fixed_constellations_usecase.dart';
@@ -16,6 +18,7 @@ class HomeCubit extends Cubit<HomeState> {
   final GetFixedConstellationsUsecase _getFixedConstellationsUsecase;
   final GetAllNotesUsecase _getAllNotesUsecase;
   final DeleteNoteUsecase _deleteNoteUsecase;
+  final IConstellationLayoutService _layoutService;
 
   Timer? _throttleTimer;
   Timer? _debounce;
@@ -25,15 +28,19 @@ class HomeCubit extends Cubit<HomeState> {
     required SaveNoteUsecase saveNoteUsecase,
     required GetAllNotesUsecase getAllNotesUsecase,
     required DeleteNoteUsecase deleteNoteUsecase,
+    required IConstellationLayoutService layoutService,
   }) : _getFixedConstellationsUsecase = getFixedConstellationsUsecase,
        _getAllNotesUsecase = getAllNotesUsecase,
        _deleteNoteUsecase = deleteNoteUsecase,
+       _layoutService = layoutService,
        super(const HomeState());
 
   static const HomeStatus initialStatus = HomeStatus.initial;
   static const HomeStatus loadingStatus = HomeStatus.loading;
   static const HomeStatus problemStatus = HomeStatus.problem;
+
   static const HomeFeedbackStatus noneFeedback = HomeFeedbackStatus.none;
+
   static const HomeFeedbackStatus errorFeedback = HomeFeedbackStatus.error;
 
   //----------------------------------------------------------------------
@@ -44,7 +51,9 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   void onToggleViewMode() {
-    if (_throttleTimer?.isActive ?? false) return;
+    if (_throttleTimer?.isActive ?? false) {
+      return;
+    }
 
     emit(state.copyWith(isListMode: !state.isListMode));
 
@@ -65,7 +74,9 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   void onSearchNotes(String query) {
-    if (_debounce?.isActive ?? false) _debounce!.cancel();
+    if (_debounce?.isActive ?? false) {
+      _debounce!.cancel();
+    }
 
     _debounce = Timer(AppDurations.onSearchNotesDebounce, () {
       final lowQuery = query.toLowerCase();
@@ -116,8 +127,8 @@ class HomeCubit extends Cubit<HomeState> {
     emit(
       state.copyWith(
         selectedNotesIds: isSelectedNote
-            ? (selectedNotes.where((id) => id != noteId).toList())
-            : ([...selectedNotes, noteId]),
+            ? selectedNotes.where((id) => id != noteId).toList()
+            : [...selectedNotes, noteId],
       ),
     );
   }
@@ -149,6 +160,7 @@ class HomeCubit extends Cubit<HomeState> {
     ).wait;
 
     String? errorMessage;
+
     List<ConstellationEntity>? allConstellations;
     List<NoteEntity>? allNotes;
 
@@ -170,15 +182,32 @@ class HomeCubit extends Cubit<HomeState> {
           message: errorMessage,
         ),
       );
-    } else {
-      emit(
-        state.copyWith(
-          status: initialStatus,
-          constellations: allConstellations,
-          allNotes: allNotes,
-        ),
-      );
+
+      return;
     }
+
+    final notes = allNotes!;
+
+    final regions = _calculateConstellationRegions(notes);
+
+    final loneStars = notes
+        .where((note) => note.constellationId == null)
+        .toList();
+
+    final universeBounds = _layoutService.calculateUniverseBoundingBox(
+      regions: regions,
+      loneStars: loneStars,
+    );
+
+    emit(
+      state.copyWith(
+        status: initialStatus,
+        constellations: allConstellations,
+        allNotes: notes,
+        constellationRegions: regions,
+        universeBounds: universeBounds,
+      ),
+    );
   }
 
   void onRefreshNotes() {
@@ -189,6 +218,7 @@ class HomeCubit extends Cubit<HomeState> {
         isRefreshing: true,
       ),
     );
+
     _refreshAllNotes();
   }
 
@@ -210,10 +240,23 @@ class HomeCubit extends Cubit<HomeState> {
       (allNotes) {
         final newList = List<NoteEntity>.from(allNotes);
 
+        final regions = _calculateConstellationRegions(newList);
+
+        final loneStars = newList
+            .where((note) => note.constellationId == null)
+            .toList();
+
+        final universeBounds = _layoutService.calculateUniverseBoundingBox(
+          regions: regions,
+          loneStars: loneStars,
+        );
+
         emit(
           state.copyWith(
             status: initialStatus,
             allNotes: newList,
+            constellationRegions: regions,
+            universeBounds: universeBounds,
             isRefreshing: false,
             filteredNotes: state.selectedConstellationId.isEmpty
                 ? const []
@@ -232,6 +275,36 @@ class HomeCubit extends Cubit<HomeState> {
     );
   }
 
+  List<ConstellationRegionEntity> _calculateConstellationRegions(
+    List<NoteEntity> notes,
+  ) {
+    final constellationIds = notes
+        .map((note) => note.constellationId)
+        .whereType<String>()
+        .toSet();
+
+    final regions = <ConstellationRegionEntity>[];
+
+    for (final constellationId in constellationIds) {
+      final constellationNotes = notes
+          .where((note) => note.constellationId == constellationId)
+          .toList();
+
+      if (constellationNotes.isEmpty) {
+        continue;
+      }
+
+      regions.add(
+        _layoutService.calculateConstellationRegion(
+          constellationId: constellationId,
+          notes: constellationNotes,
+        ),
+      );
+    }
+
+    return regions;
+  }
+
   List<NoteEntity> _filterNotesForConstellation(String constellationId) {
     if (constellationId.isEmpty) {
       return [];
@@ -248,6 +321,7 @@ class HomeCubit extends Cubit<HomeState> {
   Future<void> close() {
     _throttleTimer?.cancel();
     _debounce?.cancel();
+
     return super.close();
   }
 }

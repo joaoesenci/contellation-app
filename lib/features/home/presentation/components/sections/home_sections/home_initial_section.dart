@@ -1,13 +1,13 @@
 import 'package:collection/collection.dart';
 import 'package:constellation_app/app/app_routes.dart';
 import 'package:constellation_app/features/home/home_routes.dart';
+import 'package:constellation_app/features/home/presentation/components/widgets/home_page/constellation_canvas/constellation_canvas.dart';
 import 'package:constellation_app/features/home/presentation/components/widgets/home_page/empty_list_container.dart';
 import 'package:constellation_app/features/home/presentation/components/widgets/home_page/header_box/header_box.dart';
 import 'package:constellation_app/features/home/presentation/components/widgets/home_page/notes_menu_listview/notes_menu_listview.dart';
 import 'package:constellation_app/features/home/presentation/cubits/home_cubits/home_cubit.dart';
 import 'package:constellation_app/features/home/presentation/cubits/home_cubits/home_state.dart';
 import 'package:constellation_app/shared/constants/app_strings.dart';
-import 'package:constellation_app/shared/themes/theme_extension.dart';
 import 'package:constellation_app/shared/themes/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -89,7 +89,11 @@ class HomeInitialSection extends StatelessWidget {
 
     return Stack(
       children: [
-        SizedBox(height: context.screenHeight, width: context.screenWidth),
+        ConstellationCanvas(
+          notes: state.allNotes,
+          regions: state.constellationRegions,
+          universeBounds: state.universeBounds,
+        ),
         Positioned(
           top: AppWidgetsSizes.appBarHeight,
           left: AppSizes.large,

@@ -1,4 +1,5 @@
 import 'package:constellation_app/core/domain/entities/note_entity.dart';
+import 'package:constellation_app/core/services/constellation_layout/constellation_layout_service.dart';
 import 'package:constellation_app/core/services/storage/note_storage_service.dart';
 import 'package:constellation_app/features/home/domain/repositories/home_repository.dart';
 import 'package:constellation_app/features/home/domain/usecases/delete_note_usecase.dart';
@@ -48,12 +49,15 @@ class HomeModule extends Module {
         getFixedConstellationsUsecase:
             Modular.get<GetFixedConstellationsUsecase>(),
         saveNoteUsecase: Modular.get<SaveNoteUsecase>(),
+        layoutService: Modular.get<IConstellationLayoutService>(),
         getAllNotesUsecase: Modular.get<GetAllNotesUsecase>(),
         deleteNoteUsecase: Modular.get<DeleteNoteUsecase>(),
       ),
     );
     i.add<EditNoteCubit>(
       () => EditNoteCubit(
+        layoutService: Modular.get<IConstellationLayoutService>(),
+        getAllNotesUsecase: Modular.get<GetAllNotesUsecase>(),
         getFixedConstellationsUsecase:
             Modular.get<GetFixedConstellationsUsecase>(),
         saveNoteUsecase: Modular.get<SaveNoteUsecase>(),

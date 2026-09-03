@@ -1,4 +1,7 @@
+import 'dart:ui';
+
 import 'package:constellation_app/core/domain/entities/constellation_entity.dart';
+import 'package:constellation_app/core/domain/entities/constellation_region_entity.dart';
 import 'package:constellation_app/core/domain/entities/note_entity.dart';
 import 'package:constellation_app/features/home/presentation/cubits/home_cubits/home_enum.dart';
 import 'package:equatable/equatable.dart';
@@ -12,6 +15,8 @@ final class HomeState extends Equatable {
   final List<NoteEntity> filteredNotes;
   final List<NoteEntity> foundNotes;
   final List<ConstellationEntity> constellations;
+  final List<ConstellationRegionEntity> constellationRegions;
+  final Rect universeBounds;
   final List<String> selectedNotesIds;
   final bool isListMode;
   final bool isSearching;
@@ -27,6 +32,8 @@ final class HomeState extends Equatable {
     this.filteredNotes = const [],
     this.foundNotes = const [],
     this.constellations = const [],
+    this.constellationRegions = const [],
+    this.universeBounds = Rect.zero,
     this.selectedNotesIds = const [],
     this.isListMode = false,
     this.isSearching = false,
@@ -43,6 +50,8 @@ final class HomeState extends Equatable {
     List<NoteEntity>? filteredNotes,
     List<NoteEntity>? foundNotes,
     List<ConstellationEntity>? constellations,
+    List<ConstellationRegionEntity>? constellationRegions,
+    Rect? universeBounds,
     List<String>? selectedNotesIds,
     bool? isListMode,
     bool? isSearching,
@@ -59,6 +68,8 @@ final class HomeState extends Equatable {
       filteredNotes: filteredNotes ?? this.filteredNotes,
       foundNotes: foundNotes ?? this.foundNotes,
       constellations: constellations ?? this.constellations,
+      constellationRegions: constellationRegions ?? this.constellationRegions,
+      universeBounds: universeBounds ?? this.universeBounds,
       selectedNotesIds: selectedNotesIds ?? this.selectedNotesIds,
       isListMode: isListMode ?? this.isListMode,
       isSearching: isSearching ?? this.isSearching,
@@ -71,10 +82,14 @@ final class HomeState extends Equatable {
   List<Object?> get props => [
     status,
     feedbackStatus,
+    message,
     selectedConstellationId,
     allNotes,
     filteredNotes,
     foundNotes,
+    constellations,
+    constellationRegions,
+    universeBounds,
     selectedNotesIds,
     isListMode,
     isSearching,
