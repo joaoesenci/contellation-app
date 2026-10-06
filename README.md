@@ -6,7 +6,6 @@ A proposta do Constellation é transformar pensamentos "soltos" em pequenas estr
 
 > **Nota:** A parte em específico do canvas contendo as estrelas e constelações ainda não está finalizada.
 
----
 
 ## ✨ Sobre o projeto
 
@@ -24,7 +23,6 @@ O projeto foi desenvolvido com foco em:
 - Componentização
 - Escalabilidade
 
----
 
 ## 🚀 Funcionalidades
 
@@ -44,7 +42,6 @@ O projeto foi desenvolvido com foco em:
 - Tela de carregamento e tratamento de estados de erro
 - Interface adaptada para orientação portrait
 
----
 
 ## 🛠️ Tecnologias
 
@@ -67,7 +64,6 @@ O projeto foi desenvolvido com foco em:
 - Git
 - FVM
 
----
 
 ## 🏗️ Arquitetura
 
