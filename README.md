@@ -65,6 +65,17 @@ O projeto foi desenvolvido com foco em:
 - FVM
 
 
+## 📸 Screenshots
+
+<img width="421" height="880" alt="image" src="https://github.com/user-attachments/assets/a9f68428-70fc-40a5-a614-771d611d64b3" /> <img width="411" height="873" alt="image" src="https://github.com/user-attachments/assets/79574e7d-2432-4b7a-82e7-b551df880870" />
+
+<img width="421" height="879" alt="image" src="https://github.com/user-attachments/assets/683dd5f9-2f3f-46d7-a556-1f0cd963eae0" /> <img width="411" height="868" alt="image" src="https://github.com/user-attachments/assets/304ab115-d03e-4b38-8062-a31d233b9835" />
+
+<img width="410" height="869" alt="image" src="https://github.com/user-attachments/assets/f0444617-b474-4097-a5cd-30423e6bbd77" /> <img width="421" height="876" alt="image" src="https://github.com/user-attachments/assets/7618f3d8-0ef8-46c7-a494-3ab564c23afb" />
+
+<img width="410" height="865" alt="image" src="https://github.com/user-attachments/assets/8ef0ba20-5d1d-4195-a839-b5f2db43a676" />
+
+
 ## 🏗️ Arquitetura
 
 O projeto utiliza uma organização baseada em princípios de Clean Architecture, buscando manter as responsabilidades separadas entre domínio, infraestrutura, apresentação e recursos compartilhados.
@@ -107,3 +118,10 @@ lib/
     ├── themes/
     ├── utils/
     └── widgets/
+```
+
+## 📫 Contato
+
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Perfil-blue?style=flat&logo=linkedin)](https://www.linkedin.com/in/jo%C3%A3o-eduardo-senci-b85ba8416/)
+
+[![GitHub](https://img.shields.io/badge/GitHub-joaoesenci-black?style=flat&logo=github)](https://github.com/joaoesenci)
